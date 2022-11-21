@@ -1,0 +1,145 @@
+/* Styles reset block. Start */
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+select,
+button,
+input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: transparent;
+    padding: 0 0 0 0;
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: inherit;
+    line-height: inherit;
+    outline: none;
+    border: none;
+}
+
+
+
+/* Styles reset block. End */
+
+
+/* Common Styles. Start */
+* {
+    font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    align-items: center;
+
+    background-color: #E5E5E5;
+}
+
+.screen {
+    width: 100%;
+    height: 100vh;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    border: 0;
+    padding: 0;
+    white-space: nowrap;
+    clip-path: inset(100%);
+    clip: rect(0 0 0 0);
+    overflow: hidden;
+}
+
+.unavailable {
+    display: none;
+}
+
+/* Common Styles. End */
+
+.screen-one {
+    background-color: #004980;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.level {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 480px;
+    height: 459px;
+    background: #C2F5FF;
+    border-radius: 12px;
+}
+
+.level__title {
+    max-width: 210px;
+    font-size: 40px;
+    line-height: 120%;
+    font-weight: 400;
+    text-align: center;
+    color: #004980;
+}
+
+.level__form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 64px;
+}
+
+.form__level-options {
+    display: flex;
+    gap: 24px;
+    justify-content: space-between;
+}
+
+.level-options__option {
+    width: 98px;
+    height: 98px;
+    font-weight: 400;
+    border-radius: 12px;
+    background-color: #FFFFFF;
+    font-size: 64px;
+    line-height: 112%;
+    color: #0080C1;
+}
+
+.level-options__option:hover {
+    cursor: pointer;
+    border: 1px solid #0080C1;
+}
+
+.form__submit-button {
+    width: 246px;
+    height: 50px;
+    box-sizing: border-box;
+    border-radius: 12px;
+    background: #7AC100;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 133%;
+    color: #FFFFFF;
+}
+
+.form__submit-button:hover {
+    cursor: pointer;
+    border: 1px solid #FFFFFF;
+}
