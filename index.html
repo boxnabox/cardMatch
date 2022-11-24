@@ -10,29 +10,28 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./src/styles/styles.css">
+    <link rel="stylesheet" href="./node_modules/notyf/notyf.min.css">
 </head>
 
 <body>
-<div class="screen-one screen">
-    <div class="level">
-        <h3 class="level__title">Выбери сложность</h3>
-        <form action="#" class="level__form form">
-            <input type="text" class="form__level-otion visually-hidden" required>
-            <div class="form__level-options level-options">
-                <button type="button" class="level-options__option level-options__option_low">1</button>
-                <button type="button" class="level-options__option level-options__option_med">2</button>
-                <button type="button" class="level-options__option level-options__option_high">3</button>
-            </div>
-            <button type="submit" class="form__submit-button">Старт</button>
-        </form>
-    </div>
-</div>
-<div class="screen-two screen">
-    
-</div>
-<div class="screen-three screen">
-    
-</div>
+
+    <!-- external packages-->
+    <script src="./node_modules/notyf/notyf.min.js"></script>
+
+    <script src="./src/scripts/template_engine.js"></script>
+
+    <script src="./cardMatch.js"></script>
+    <script src="./src/assests/difficultyLvlPlate.js"></script>
+    <script src="./src/assests/gameTable.js"></script>
+    <script src="./src/assests/resultPlate.js"></script>
+
+    <script>
+
+        const body = document.querySelector("body");
+
+        const game = new cardMatchApp(body);
+
+    </script>
 
 </body>
 
