@@ -9,28 +9,20 @@ class cardMatchApp {
             spentTime: undefined,
             pickedCards: undefined
         }
-        this.state = new Proxy(this.state, {
+        // this.state = new Proxy(this.state, {
 
-            set(target, property, value) {
+        //     set(target, property, value) {
 
-                if (target.gameStatus !== value) {
-                    console.log(target);
-                    console.dir(target);
-                    console.log(property);
-                    console.log(value);
-                    console.log(this);
+        //         if (target.gameStatus !== value) {
 
-                    target.gameStatus = value;
-                    return true;
-                } else {
-                    console.log(target);
-                    console.log(property);
-                    console.log(value);
-                    return false;
-                }
-            }
-        });
+        //             target.gameStatus = value;
+        //             return true;
 
+        //         } else {
+        //             return false;
+        //         }
+        //     }
+        // });
 
         this.showCurrentGameStage = this.showCurrentGameStage.bind(this);
 
@@ -39,7 +31,7 @@ class cardMatchApp {
 
         this.appScreen = this.appContainer.querySelector(".app-screen");
 
-        
+        this.showCurrentGameStage(this.state.gameStatus)
     }
 
     render(widgetAsObject) {

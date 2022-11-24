@@ -18,7 +18,6 @@ class difficultyLevelPlate {
         this.optionForm.addEventListener("submit", (event) => {
             this.formSubmitHandler(event, master);
         });
-
     }
 
     render(widgetAsObject) {
@@ -29,7 +28,6 @@ class difficultyLevelPlate {
         const target = event.target;
 
         this.optionInput.value = target.value;
-        // console.log(this.optionInput.value);
 
         this.options.forEach(button => {
             (button === target) ? button.classList.remove("not-selected"): button.classList.add("not-selected");
@@ -42,7 +40,7 @@ class difficultyLevelPlate {
         if (this.optionInput.validity.valid) {
             master.state.difficultyLevel = this.optionInput.value;
             master.state.gameStatus = "game";
-            console.log(master.state.difficultyLevel);
+            master.showCurrentGameStage(master.state.gameStatus);
 
             console.log("redirecting to game session");
             return;
