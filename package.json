@@ -1,0 +1,22 @@
+{
+  "name": "cardmatch",
+  "version": "1.0.0",
+  "description": "This is repository for the 4th block of SkyPro webdev course.",
+  "main": "cardMatch.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/boxnabox/cardMatch.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/boxnabox/cardMatch/issues"
+  },
+  "homepage": "https://github.com/boxnabox/cardMatch#readme",
+  "dependencies": {
+    "notyf": "3.10.0"
+  }
+}
