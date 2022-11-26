@@ -1,3 +1,5 @@
+/*global templateEngine */
+
 class resultPlate {
     constructor(container, master) {
         this.plateContainer = container; // cardMatchApp.appScreen
@@ -8,12 +10,11 @@ class resultPlate {
     render(widgetAsObject) {
         this.plateContainer.appendChild(templateEngine(widgetAsObject));
     }
-
 }
 
 // TEMPLATES
 resultPlate.temeplate = {
-    tag: "div",
-    cls: "result",
-    content: "Result Plate"
+    tag: 'div',
+    cls: 'result',
+    content: 'Result Plate',
 };

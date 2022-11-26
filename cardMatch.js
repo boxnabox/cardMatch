@@ -1,20 +1,21 @@
+/*global templateEngine, difficultyLevelPlate, gameTable, resultPlate */
+
 // APP
 class cardMatchApp {
     constructor(container) {
-
         // GLOBAL APP STATE
         this.state = {
             difficultyLevel: undefined, // low|med|high
-            gameStatus: "start", // start<default>|game|result
+            gameStatus: 'start', // start<default>|game|result
             spentTime: undefined,
-            pickedCards: undefined
-        }
+            pickedCards: undefined,
+        };
 
         this.showCurrentGameStage = this.showCurrentGameStage.bind(this);
         this.appContainer = container; // document.body
         this.render(cardMatchApp.appScreenTemeplate);
-        this.appScreen = this.appContainer.querySelector(".app-screen");
-        this.showCurrentGameStage(this.state.gameStatus)
+        this.appScreen = this.appContainer.querySelector('.app-screen');
+        this.showCurrentGameStage(this.state.gameStatus);
     }
 
     render(widgetAsObject) {
@@ -22,27 +23,29 @@ class cardMatchApp {
     }
 
     showCurrentGameStage(status) {
-        this.appScreen.innerHTML = "";
+        this.appScreen.innerHTML = '';
 
         switch (true) {
-            case status === "start":
-                this.appStartStage = new difficultyLevelPlate(this.appScreen, this);
+            case status === 'start':
+                this.appStartStage = new difficultyLevelPlate(
+                    this.appScreen,
+                    this
+                );
                 break;
 
-            case status === "game":
+            case status === 'game':
                 this.appGameStage = new gameTable(this.appScreen, this);
                 break;
 
-            case status === "result":
+            case status === 'result':
                 this.appResultStage = new resultPlate(this.appScreen, this);
                 break;
         }
     }
-
 }
 
 // TEMPLATES
 cardMatchApp.appScreenTemeplate = {
-    tag: "div",
-    cls: "app-screen"
+    tag: 'div',
+    cls: 'app-screen',
 };
