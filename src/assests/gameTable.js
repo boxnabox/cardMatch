@@ -1,20 +1,310 @@
 /*global templateEngine */
+/*eslint no-debugger: "off"*/
 
 class gameTable {
     constructor(container, master) {
         this.plateContainer = container; // cardMatchApp.appScreen
-
+        this.master = master;
         this.render(gameTable.temeplate);
+
+        this.gameTable = this.plateContainer.querySelector('.game-table');
+        this.stopwatchWindow = this.gameTable.querySelector('.stopwatch__time');
+        this.goBackButton = this.gameTable.querySelector(
+            '.game-table__go-back-button'
+        );
+        this.cardsGrid = this.gameTable.querySelector('.game-table__cards');
+        this.applyTableGrid();
+
+        this.stopwatch = this.stopwatch.bind(this);
+        this.hideCards = this.hideCards.bind(this);
+        this.cardClickHandler = this.cardClickHandler.bind(this);
+
+        this.interval = setInterval(this.stopwatch, 1000);
+        this.cards = [];
+        ['6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'].map((value) => {
+            ['h', 'd', 'c', 's'].forEach((suit) => {
+                const card = [value, suit];
+                this.cards.push(card);
+            });
+        });
+        this.cardsInGame = this.tossCards(
+            this.getCardsByLevel(this.master.state.difficultyLevel)
+        );
+        this.pickedCard = undefined;
+
+        // adding cards on table
+        this.cardsInGame.forEach((card) => {
+            this.card = templateEngine(gameTable.card);
+            this.card.appendChild(this.drawCardFace(card));
+            this.card.appendChild(this.drawCardBack());
+
+            this.cardsGrid.appendChild(this.card);
+        });
+
+        // hiding cards, dealing with clicks
+        this.cardBacks = this.cardsGrid.querySelectorAll('.card-back');
+        this.hideDelay = setTimeout(this.hideCards, 5000);
+        this.cardBacks.forEach((cardBack) => {
+            cardBack.addEventListener('click', this.cardClickHandler);
+        });
     }
 
     render(widgetAsObject) {
         this.plateContainer.appendChild(templateEngine(widgetAsObject));
+    }
+
+    stopwatch() {
+        this.master.state.spentTime++;
+
+        let mins = Math.floor(this.master.state.spentTime / 60);
+        let secs = this.master.state.spentTime % 60;
+
+        if (mins < 10) mins = '0' + mins;
+        if (secs < 10) secs = '0' + secs;
+        this.stopwatchWindow.innerText = `${mins}.${secs}`;
+    }
+
+    getCardsByLevel(level /*low|med|high*/) {
+        const result = [];
+        let iterator = 3;
+        level === 'med' && (iterator = 6);
+        level === 'high' && (iterator = 10);
+        const proxyCards = this.cards;
+
+        for (let i = iterator; i > 0; i--) {
+            const randomIndex = Math.floor(Math.random() * proxyCards.length);
+
+            result.push(proxyCards[randomIndex]);
+            result.push(proxyCards.splice(randomIndex, 1).flat());
+        }
+        return result;
+    }
+
+    tossCards(deck) {
+        const result = [];
+
+        while (deck.length) {
+            result.push(
+                deck.splice(Math.floor(Math.random() * deck.length), 1)
+            );
+        }
+        return result.flat();
+    }
+
+    applyTableGrid() {
+        switch (this.master.state.difficultyLevel) {
+            case 'low':
+                this.cardsGrid.classList.add('game-table__cards_low');
+                break;
+
+            case 'med':
+                this.cardsGrid.classList.add('game-table__cards_med');
+                break;
+
+            case 'high':
+                this.cardsGrid.classList.add('game-table__cards_high');
+                break;
+        }
+    }
+
+    drawCardFace(cardCode) {
+        const cardRank = cardCode[0];
+        const cardSuit = cardCode[1];
+
+        let cardSuitLink = '';
+        switch (cardSuit) {
+            case 'h':
+                cardSuitLink = './src/img/hearts.svg';
+                break;
+            case 's':
+                cardSuitLink = './src/img/spades.svg';
+                break;
+            case 'd':
+                cardSuitLink = './src/img/diamonds.svg';
+                break;
+            case 'c':
+                cardSuitLink = './src/img/clubs.svg';
+                break;
+        }
+
+        const cardFace = templateEngine(gameTable.cardFace);
+        const cardRankSlots = cardFace.querySelectorAll('.card-face__rank');
+        const cardSuitSlots = cardFace.querySelectorAll('.card-face__suit');
+
+        cardRankSlots.forEach((slot) => {
+            slot.innerText = cardRank;
+        });
+
+        cardSuitSlots.forEach((slot) => {
+            slot.setAttribute('src', cardSuitLink);
+        });
+
+        return cardFace;
+    }
+
+    drawCardBack() {
+        const cardBack = templateEngine(gameTable.cardBack);
+        const cardBackSlot = cardBack.querySelector('.card-back__img');
+        cardBackSlot.setAttribute('src', './src/img/card-back.svg');
+        return cardBack;
+    }
+
+    hideCards() {
+        this.cardBacks.forEach((cardBack) => {
+            cardBack.classList.add('cover');
+        });
+    }
+
+    cardClickHandler(event) {
+        const target = event.currentTarget;
+        target.classList.remove('cover');
+        const cardsParent = target.closest('.game-table__cards');
+        const cardsArray = cardsParent.querySelectorAll('.card-back');
+        let cardIndex = undefined;
+
+        for (let i = 0; i < cardsArray.length; i++) {
+            if (cardsArray[i] === target) {
+                cardIndex = i;
+                break;
+            }
+        }
+
+        if (!this.pickedCard) {
+            this.pickedCard = this.cardsInGame[cardIndex];
+            return;
+        }
+
+        if (
+            this.pickedCard.toString() ===
+            this.cardsInGame[cardIndex].toString()
+        ) {
+            alert('match');
+            this.pickedCard = undefined;
+        } else {
+            alert('fail');
+            console.log('showing fail screen');
+        }
     }
 }
 
 // TEMPLATES
 gameTable.temeplate = {
     tag: 'div',
-    cls: 'game',
-    content: 'Game Table',
+    cls: 'game-table',
+    content: [
+        {
+            tag: 'header',
+            cls: 'game-table__header',
+            content: [
+                {
+                    tag: 'div',
+                    cls: ['game-table__stopwatch', 'stopwatch'],
+                    content: [
+                        {
+                            tag: 'div',
+                            cls: 'stopwatch__units',
+                            content: [
+                                {
+                                    tag: 'div',
+                                    cls: 'stopwatch__minute-unit',
+                                    content: 'min',
+                                },
+                                {
+                                    tag: 'div',
+                                    cls: 'stopwatch__second-unit',
+                                    content: 'sec',
+                                },
+                            ],
+                        },
+                        {
+                            tag: 'div',
+                            cls: 'stopwatch__time',
+                            content: '00.00',
+                        },
+                    ],
+                },
+                {
+                    tag: 'button',
+                    cls: 'game-table__go-back-button',
+                    attrs: {
+                        type: 'button',
+                    },
+                    content: 'Начать заново',
+                },
+            ],
+        },
+        {
+            tag: 'div',
+            cls: 'game-table__cards',
+        },
+    ],
+};
+
+gameTable.card = {
+    tag: 'div',
+    cls: 'card',
+};
+
+gameTable.cardFace = {
+    tag: 'div',
+    cls: 'card-face',
+    content: [
+        {
+            tag: 'div',
+            cls: 'card-face__desc',
+            content: [
+                {
+                    tag: 'div',
+                    cls: 'card-face__rank',
+                    content: 'A',
+                },
+                {
+                    tag: 'img',
+                    cls: 'card-face__suit',
+                    attrs: {
+                        alt: "Card's suit image",
+                    },
+                },
+            ],
+        },
+        {
+            tag: 'img',
+            cls: ['card-face__suit', 'card-face__suit_main'],
+            attrs: {
+                alt: "Card's suit image",
+            },
+        },
+        {
+            tag: 'div',
+            cls: ['card-face__desc', 'card-face__desc_reverse'],
+            content: [
+                {
+                    tag: 'div',
+                    cls: 'card-face__rank',
+                    content: 'A',
+                },
+                {
+                    tag: 'img',
+                    cls: 'card-face__suit',
+                    attrs: {
+                        alt: "Card's suit image",
+                    },
+                },
+            ],
+        },
+    ],
+};
+
+gameTable.cardBack = {
+    tag: 'div',
+    cls: 'card-back',
+    content: [
+        {
+            tag: 'img',
+            cls: 'card-back__img',
+            attrs: {
+                alt: "Card's back image",
+            },
+        },
+    ],
 };

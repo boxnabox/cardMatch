@@ -1,4 +1,4 @@
-/* Styles reset block. Start */
+/* Styles reset. Common Styles. */
 
 * {
     margin: 0;
@@ -26,10 +26,6 @@ input {
     outline: none;
     border: none;
 }
-
-/* Styles reset block. End */
-
-/* Common Styles. Start */
 
 body {
     display: flex;
@@ -66,7 +62,7 @@ body {
     display: none;
 }
 
-/* Common Styles. End */
+/* End */
 
 .difficulty-level {
     display: flex;
@@ -118,7 +114,8 @@ body {
     border: 1px solid #0080c1;
 }
 
-.form__submit-button {
+.form__submit-button,
+.game-table__go-back-button {
     width: 246px;
     height: 50px;
     box-sizing: border-box;
@@ -130,7 +127,8 @@ body {
     color: #fff;
 }
 
-.form__submit-button:hover {
+.form__submit-button:hover,
+.game-table__go-back-button:hover {
     cursor: pointer;
     border: 1px solid #fff;
 }
@@ -138,4 +136,121 @@ body {
 .not-selected {
     background-color: #e5e5e5;
     color: #6099b6;
+}
+
+.game-table {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 975px;
+}
+
+.game-table__header {
+    width: 100%;
+    margin-bottom: 46px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.game-table__stopwatch {
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    align-items: flex-end;
+}
+
+.stopwatch__units {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    font-size: 16px;
+    line-height: 16px;
+}
+
+.stopwatch__time {
+    width: 182px;
+    font-size: 64px;
+    line-height: 64px;
+}
+
+.game-table__cards {
+    display: grid;
+    gap: 15px;
+}
+
+.game-table__cards_low {
+    grid-template-columns: repeat(3, 95px);
+    grid-template-rows: repeat(2, 133px);
+}
+
+.game-table__cards_med {
+    grid-template-columns: repeat(4, 95px);
+    grid-template-rows: repeat(3, 133px);
+}
+
+.game-table__cards_high {
+    grid-template-columns: repeat(5, 95px);
+    grid-template-rows: repeat(4, 133px);
+}
+
+.card {
+    position: relative;
+}
+
+.card-face {
+    width: 95px;
+    height: 133px;
+    box-sizing: border-box;
+    background: #fff;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px;
+}
+
+.card-face__desc {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+}
+
+.card-face__desc_reverse {
+    transform: rotate(180deg);
+}
+
+.card-face__rank {
+    font-size: 24px;
+    line-height: 24px;
+}
+
+.card-face__suit {
+    height: 8px;
+    margin-left: 4px;
+}
+
+.card-face__suit_main {
+    height: 28px;
+}
+
+.card-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 95px;
+    height: 133px;
+    z-index: -1;
+}
+
+.card-back:hover {
+    cursor: pointer;
+}
+
+.cover {
+    z-index: 1;
 }

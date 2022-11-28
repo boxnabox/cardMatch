@@ -7,7 +7,7 @@ class cardMatchApp {
         this.state = {
             difficultyLevel: undefined, // low|med|high
             gameStatus: 'start', // start<default>|game|result
-            spentTime: undefined,
+            spentTime: 0,
             pickedCards: undefined,
         };
 

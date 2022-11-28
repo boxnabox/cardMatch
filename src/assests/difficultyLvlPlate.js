@@ -57,7 +57,6 @@ class difficultyLevelPlate {
             master.state.gameStatus = 'game';
             master.showCurrentGameStage(master.state.gameStatus);
 
-            console.log('redirecting to game session');
             return;
         }
 
