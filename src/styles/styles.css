@@ -1,8 +1,9 @@
-/* Styles reset block. Start */
+/* Styles reset. Common Styles. */
 
 * {
     margin: 0;
     padding: 0;
+    font-family: Montserrat, sans-serif;
 }
 
 a {
@@ -12,11 +13,11 @@ a {
 select,
 button,
 input {
-    -webkit-appearance: none;
-    -moz-appearance: none;
+    --webkit-appearance: none;
+    --moz-appearance: none;
     appearance: none;
     background-color: transparent;
-    padding: 0 0 0 0;
+    padding: 0;
     margin: 0;
     font-family: inherit;
     font-size: inherit;
@@ -26,28 +27,22 @@ input {
     border: none;
 }
 
-
-
-/* Styles reset block. End */
-
-
-/* Common Styles. Start */
-* {
-    font-family: 'Montserrat', sans-serif;
-}
-
 body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
     align-items: center;
-
-    background-color: #E5E5E5;
+    background-color: #e5e5e5;
 }
 
 .app-screen {
     width: 100%;
     height: 100vh;
+    background-color: #004980;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .visually-hidden {
@@ -67,25 +62,7 @@ body {
     display: none;
 }
 
-
-
-/* Common Styles. End */
-
-.screen-one {
-    background-color: #004980;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.app-screen {
-    background-color: #004980;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
+/* End */
 
 .difficulty-level {
     display: flex;
@@ -94,7 +71,7 @@ body {
     align-items: center;
     width: 480px;
     height: 459px;
-    background: #C2F5FF;
+    background: #c2f5ff;
     border-radius: 12px;
 }
 
@@ -126,35 +103,154 @@ body {
     height: 98px;
     font-weight: 400;
     border-radius: 12px;
-    background-color: #FFFFFF;
+    background-color: #fff;
     font-size: 64px;
     line-height: 112%;
-    color: #0080C1;
+    color: #0080c1;
 }
 
 .form__difficulty-level-option:hover {
     cursor: pointer;
-    border: 1px solid #0080C1;
+    border: 1px solid #0080c1;
 }
 
-.form__submit-button {
+.form__submit-button,
+.game-table__go-back-button {
     width: 246px;
     height: 50px;
     box-sizing: border-box;
     border-radius: 12px;
-    background: #7AC100;
+    background: #7ac100;
     font-weight: 400;
     font-size: 24px;
     line-height: 133%;
-    color: #FFFFFF;
+    color: #fff;
 }
 
-.form__submit-button:hover {
+.form__submit-button:hover,
+.game-table__go-back-button:hover {
     cursor: pointer;
-    border: 1px solid #FFFFFF;
+    border: 1px solid #fff;
 }
 
 .not-selected {
-    background-color: #E5E5E5;
+    background-color: #e5e5e5;
     color: #6099b6;
+}
+
+.game-table {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 975px;
+}
+
+.game-table__header {
+    width: 100%;
+    margin-bottom: 46px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.game-table__stopwatch {
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    align-items: flex-end;
+}
+
+.stopwatch__units {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    font-size: 16px;
+    line-height: 16px;
+}
+
+.stopwatch__time {
+    width: 182px;
+    font-size: 64px;
+    line-height: 64px;
+}
+
+.game-table__cards {
+    display: grid;
+    gap: 15px;
+}
+
+.game-table__cards_low {
+    grid-template-columns: repeat(3, 95px);
+    grid-template-rows: repeat(2, 133px);
+}
+
+.game-table__cards_med {
+    grid-template-columns: repeat(4, 95px);
+    grid-template-rows: repeat(3, 133px);
+}
+
+.game-table__cards_high {
+    grid-template-columns: repeat(5, 95px);
+    grid-template-rows: repeat(4, 133px);
+}
+
+.card {
+    position: relative;
+}
+
+.card-face {
+    width: 95px;
+    height: 133px;
+    box-sizing: border-box;
+    background: #fff;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px;
+}
+
+.card-face__desc {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+}
+
+.card-face__desc_reverse {
+    transform: rotate(180deg);
+}
+
+.card-face__rank {
+    font-size: 24px;
+    line-height: 24px;
+}
+
+.card-face__suit {
+    height: 8px;
+    margin-left: 4px;
+}
+
+.card-face__suit_main {
+    height: 28px;
+}
+
+.card-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 95px;
+    height: 133px;
+    z-index: -1;
+}
+
+.card-back:hover {
+    cursor: pointer;
+}
+
+.cover {
+    z-index: 1;
 }

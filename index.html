@@ -1,38 +1,35 @@
 <!DOCTYPE html>
 <html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Card Match</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="./src/styles/styles.css" />
+        <link rel="stylesheet" href="./node_modules/notyf/notyf.min.css" />
+    </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Card Match</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./src/styles/styles.css">
-    <link rel="stylesheet" href="./node_modules/notyf/notyf.min.css">
-</head>
+    <body>
+        <!-- external packages-->
+        <script src="./node_modules/notyf/notyf.min.js"></script>
 
-<body>
+        <script src="./src/scripts/template_engine.js"></script>
 
-    <!-- external packages-->
-    <script src="./node_modules/notyf/notyf.min.js"></script>
+        <script src="./src/assests/difficultyLvlPlate.js"></script>
+        <script src="./src/assests/gameTable.js"></script>
+        <script src="./src/assests/resultPlate.js"></script>
+        <script src="./cardMatch.js"></script>
 
-    <script src="./src/scripts/template_engine.js"></script>
+        <script>
+            const body = document.querySelector('body');
 
-    <script src="./cardMatch.js"></script>
-    <script src="./src/assests/difficultyLvlPlate.js"></script>
-    <script src="./src/assests/gameTable.js"></script>
-    <script src="./src/assests/resultPlate.js"></script>
-
-    <script>
-
-        const body = document.querySelector("body");
-
-        const game = new cardMatchApp(body);
-
-    </script>
-
-</body>
-
+            const game = new cardMatchApp(body);
+        </script>
+    </body>
 </html>

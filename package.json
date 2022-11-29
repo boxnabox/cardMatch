@@ -1,22 +1,39 @@
 {
-  "name": "cardmatch",
-  "version": "1.0.0",
-  "description": "This is repository for the 4th block of SkyPro webdev course.",
-  "main": "cardMatch.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/boxnabox/cardMatch.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/boxnabox/cardMatch/issues"
-  },
-  "homepage": "https://github.com/boxnabox/cardMatch#readme",
-  "dependencies": {
-    "notyf": "3.10.0"
-  }
+    "name": "cardmatch",
+    "version": "1.0.0",
+    "description": "This is repository for the 4th block of SkyPro webdev course.",
+    "main": "cardMatch.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "formatAll": "prettier --write .",
+        "prepare": "husky install",
+        "formatSRC": "prettier --write ./src/",
+        "lint:js": "eslint ./",
+        "lint:css": "stylelint \"**.css\"",
+        "lint": "npm run lint:js && npm run lint:css"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/boxnabox/cardMatch.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/boxnabox/cardMatch/issues"
+    },
+    "homepage": "https://github.com/boxnabox/cardMatch#readme",
+    "dependencies": {
+        "notyf": "3.10.0"
+    },
+    "devDependencies": {
+        "eslint": "^8.28.0",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-prettier": "^4.2.1",
+        "husky": "^8.0.2",
+        "prettier": "^2.8.0",
+        "stylelint": "^14.15.0",
+        "stylelint-config-prettier": "^9.0.4",
+        "stylelint-config-standard": "^29.0.0",
+        "stylelint-prettier": "^2.0.0"
+    }
 }
