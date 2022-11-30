@@ -8,7 +8,7 @@ class cardMatchApp {
             difficultyLevel: undefined, // low|med|high
             gameStatus: 'start', // start<default>|game|result
             spentTime: 0,
-            pickedCards: undefined,
+            pickedCards: [],
         };
 
         this.showCurrentGameStage = this.showCurrentGameStage.bind(this);
@@ -23,10 +23,9 @@ class cardMatchApp {
     }
 
     showCurrentGameStage(status) {
-        this.appScreen.innerHTML = '';
-
         switch (true) {
             case status === 'start':
+                this.appScreen.innerHTML = '';
                 this.appStartStage = new difficultyLevelPlate(
                     this.appScreen,
                     this
@@ -34,10 +33,11 @@ class cardMatchApp {
                 break;
 
             case status === 'game':
+                this.appScreen.innerHTML = '';
                 this.appGameStage = new gameTable(this.appScreen, this);
                 break;
 
-            case status === 'result':
+            case status === 'win' || status === 'lose':
                 this.appResultStage = new resultPlate(this.appScreen, this);
                 break;
         }

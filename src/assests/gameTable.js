@@ -18,6 +18,7 @@ class gameTable {
         this.stopwatch = this.stopwatch.bind(this);
         this.hideCards = this.hideCards.bind(this);
         this.cardClickHandler = this.cardClickHandler.bind(this);
+        this.goBackClickHandler = this.goBackClickHandler.bind(this);
 
         this.interval = setInterval(this.stopwatch, 1000);
         this.cards = [];
@@ -47,6 +48,8 @@ class gameTable {
         this.cardBacks.forEach((cardBack) => {
             cardBack.addEventListener('click', this.cardClickHandler);
         });
+
+        this.goBackButton.addEventListener('click', this.goBackClickHandler);
     }
 
     render(widgetAsObject) {
@@ -56,12 +59,18 @@ class gameTable {
     stopwatch() {
         this.master.state.spentTime++;
 
-        let mins = Math.floor(this.master.state.spentTime / 60);
-        let secs = this.master.state.spentTime % 60;
+        this.stopwatchWindow.innerText = this.formatTime(
+            this.master.state.spentTime
+        );
+    }
+
+    formatTime(secconds) {
+        let mins = Math.floor(secconds / 60);
+        let secs = secconds % 60;
 
         if (mins < 10) mins = '0' + mins;
         if (secs < 10) secs = '0' + secs;
-        this.stopwatchWindow.innerText = `${mins}.${secs}`;
+        return `${mins}.${secs}`;
     }
 
     getCardsByLevel(level /*low|med|high*/) {
@@ -170,6 +179,7 @@ class gameTable {
         }
 
         if (!this.pickedCard) {
+            this.master.state.pickedCards.push(this.cardsInGame[cardIndex]);
             this.pickedCard = this.cardsInGame[cardIndex];
             return;
         }
@@ -178,12 +188,31 @@ class gameTable {
             this.pickedCard.toString() ===
             this.cardsInGame[cardIndex].toString()
         ) {
-            alert('match');
+            this.master.state.pickedCards.push(this.cardsInGame[cardIndex]);
             this.pickedCard = undefined;
+
+            if (
+                this.master.state.pickedCards.length === this.cardsInGame.length
+            ) {
+                clearInterval(this.interval);
+                this.master.state.gameStatus = 'win';
+                this.master.showCurrentGameStage(this.master.state.gameStatus);
+            }
         } else {
-            alert('fail');
+            clearInterval(this.interval);
+            this.master.state.gameStatus = 'lose';
             console.log('showing fail screen');
+            this.master.showCurrentGameStage(this.master.state.gameStatus);
         }
+    }
+
+    goBackClickHandler() {
+        this.master.state.gameStatus = 'start';
+        this.master.state.spentTime = 0;
+        this.master.state.difficultyLevel = undefined;
+        this.master.state.pickedCards = [];
+
+        this.master.showCurrentGameStage(this.master.state.gameStatus);
     }
 }
 
@@ -225,7 +254,7 @@ gameTable.temeplate = {
                 },
                 {
                     tag: 'button',
-                    cls: 'game-table__go-back-button',
+                    cls: ['game-table__go-back-button', 'button'],
                     attrs: {
                         type: 'button',
                     },

@@ -93,7 +93,7 @@ difficultyLevelPlate.temeplate = {
     content: [
         {
             tag: 'h3',
-            cls: 'difficulty-level__title',
+            cls: ['difficulty-level__title', 'title'],
             content: 'Выбери сложность',
         },
         {
@@ -160,7 +160,7 @@ difficultyLevelPlate.temeplate = {
                 },
                 {
                     tag: 'button',
-                    cls: ['form__submit-button', 'submit-button'],
+                    cls: ['form__submit-button', 'button'],
                     attrs: {
                         type: 'submit',
                     },
