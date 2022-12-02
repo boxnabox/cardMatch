@@ -1,44 +1,45 @@
-/*global templateEngine*/
+/*global */
+import { templateEngine } from '../scripts/template_engine.js';
+import loseIcon from '../img/lose.svg';
+import winIcon from '../img/win.svg';
+export { ResultPlate };
 
-class resultPlate {
+class ResultPlate {
     constructor(container, master) {
         this.plateContainer = container; // cardMatchApp.appScreen
         this.master = master;
-        this.render(resultPlate.temeplate);
+        // this.render(ResultPlate.temeplate);
+        this.resultScreen = templateEngine(ResultPlate.temeplate);
 
-        this.resultPlate = this.plateContainer.querySelector('.result-plate');
+        this.resultPlate = this.resultScreen.querySelector('.result-plate');
         this.resultImage = this.resultPlate.querySelector(
             '.result-plate__image'
         );
         this.resultTitle = this.resultPlate.querySelector(
             '.result-plate__title'
         );
-        this.resultTime = this.plateContainer.querySelector(
-            '.result-plate__time'
-        );
+        this.resultTime = this.resultPlate.querySelector('.result-plate__time');
         this.playAgainButtom = this.resultPlate.querySelector(
             '.result-plate__again-button'
         );
 
         this.goBackClickHandler = this.goBackClickHandler.bind(this);
+        this.playAgainButtom.addEventListener('click', this.goBackClickHandler);
 
         if (this.master.state.gameStatus === 'win') {
-            this.resultImage.setAttribute('src', './src/img/win.svg');
+            this.resultImage.setAttribute('src', winIcon);
             this.resultTitle.innerText = 'Вы выиграли!';
         } else {
             this.resultTitle.innerText = 'Вы проиграли!';
-            this.resultImage.setAttribute('src', './src/img/lose.svg');
+            this.resultImage.setAttribute('src', loseIcon);
         }
-
         this.resultTime.innerText = this.formatTime(
             this.master.state.spentTime
         );
 
-        this.playAgainButtom.addEventListener('click', this.goBackClickHandler);
-    }
+        console.dir(this.resultPlate);
 
-    render(widgetAsObject) {
-        this.plateContainer.appendChild(templateEngine(widgetAsObject));
+        this.plateContainer.appendChild(this.resultScreen);
     }
 
     formatTime(secconds) {
@@ -61,13 +62,13 @@ class resultPlate {
 }
 
 // TEMPLATES
-resultPlate.temeplate = {
+ResultPlate.temeplate = {
     tag: 'div',
     cls: 'result-plate__canvas',
     content: [
         {
             tag: 'div',
-            cls: 'result-plate',
+            cls: ['result-plate'],
             content: [
                 {
                     tag: 'img',

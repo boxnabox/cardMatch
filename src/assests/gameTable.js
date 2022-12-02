@@ -1,11 +1,18 @@
-/*global templateEngine */
+/*global */
 /*eslint no-debugger: "off"*/
+import { templateEngine } from '../scripts/template_engine.js';
+import cardBackImg from '../img/cardback.svg';
+import diamondsIcon from '../img/diamonds.svg';
+import heartsIcon from '../img/hearts.svg';
+import spadesIcon from '../img/spades.svg';
+import clubsIcon from '../img/clubs.svg';
+export { GameTable };
 
-class gameTable {
+class GameTable {
     constructor(container, master) {
         this.plateContainer = container; // cardMatchApp.appScreen
         this.master = master;
-        this.render(gameTable.temeplate);
+        this.render(GameTable.temeplate);
 
         this.gameTable = this.plateContainer.querySelector('.game-table');
         this.stopwatchWindow = this.gameTable.querySelector('.stopwatch__time');
@@ -35,7 +42,7 @@ class gameTable {
 
         // adding cards on table
         this.cardsInGame.forEach((card) => {
-            this.card = templateEngine(gameTable.card);
+            this.card = templateEngine(GameTable.card);
             this.card.appendChild(this.drawCardFace(card));
             this.card.appendChild(this.drawCardBack());
 
@@ -45,8 +52,8 @@ class gameTable {
         // hiding cards, dealing with clicks
         this.cardBacks = this.cardsGrid.querySelectorAll('.card-back');
         this.hideDelay = setTimeout(this.hideCards, 5000);
-        this.cardBacks.forEach((cardBack) => {
-            cardBack.addEventListener('click', this.cardClickHandler);
+        this.cardBacks.forEach((card) => {
+            card.addEventListener('click', this.cardClickHandler);
         });
 
         this.goBackButton.addEventListener('click', this.goBackClickHandler);
@@ -123,20 +130,20 @@ class gameTable {
         let cardSuitLink = '';
         switch (cardSuit) {
             case 'h':
-                cardSuitLink = './src/img/hearts.svg';
+                cardSuitLink = heartsIcon;
                 break;
             case 's':
-                cardSuitLink = './src/img/spades.svg';
+                cardSuitLink = spadesIcon;
                 break;
             case 'd':
-                cardSuitLink = './src/img/diamonds.svg';
+                cardSuitLink = diamondsIcon;
                 break;
             case 'c':
-                cardSuitLink = './src/img/clubs.svg';
+                cardSuitLink = clubsIcon;
                 break;
         }
 
-        const cardFace = templateEngine(gameTable.cardFace);
+        const cardFace = templateEngine(GameTable.cardFace);
         const cardRankSlots = cardFace.querySelectorAll('.card-face__rank');
         const cardSuitSlots = cardFace.querySelectorAll('.card-face__suit');
 
@@ -152,9 +159,10 @@ class gameTable {
     }
 
     drawCardBack() {
-        const cardBack = templateEngine(gameTable.cardBack);
+        const cardBack = templateEngine(GameTable.cardBack);
+        const cardBackLink = cardBackImg;
         const cardBackSlot = cardBack.querySelector('.card-back__img');
-        cardBackSlot.setAttribute('src', './src/img/card-back.svg');
+        cardBackSlot.setAttribute('src', cardBackLink);
         return cardBack;
     }
 
@@ -217,7 +225,7 @@ class gameTable {
 }
 
 // TEMPLATES
-gameTable.temeplate = {
+GameTable.temeplate = {
     tag: 'div',
     cls: 'game-table',
     content: [
@@ -269,12 +277,12 @@ gameTable.temeplate = {
     ],
 };
 
-gameTable.card = {
+GameTable.card = {
     tag: 'div',
     cls: 'card',
 };
 
-gameTable.cardFace = {
+GameTable.cardFace = {
     tag: 'div',
     cls: 'card-face',
     content: [
@@ -324,7 +332,7 @@ gameTable.cardFace = {
     ],
 };
 
-gameTable.cardBack = {
+GameTable.cardBack = {
     tag: 'div',
     cls: 'card-back',
     content: [
