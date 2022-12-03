@@ -1,9 +1,12 @@
-/*global templateEngine, Notyf */
+/*global */
+import { templateEngine } from '../scripts/template_engine.js';
+import { Notyf } from 'notyf';
+export { DifficultyLevelPlate };
 
-class difficultyLevelPlate {
+class DifficultyLevelPlate {
     constructor(container, master) {
         this.plateContainer = container; // cardMatchApp.appScreen
-        this.render(difficultyLevelPlate.temeplate);
+        this.render(DifficultyLevelPlate.temeplate);
 
         this.levelPlate =
             this.plateContainer.querySelector('.difficulty-level');
@@ -60,11 +63,11 @@ class difficultyLevelPlate {
             return;
         }
 
-        for (const errorType of difficultyLevelPlate.errorKeys) {
+        for (const errorType of DifficultyLevelPlate.errorKeys) {
             if (!this.optionInput.validity[errorType]) continue;
 
             const errorMessage =
-                difficultyLevelPlate.ERRORS[this.optionInput.name][errorType];
+                DifficultyLevelPlate.ERRORS[this.optionInput.name][errorType];
             const notyf = new Notyf();
             notyf.error({
                 message: errorMessage,
@@ -79,21 +82,21 @@ class difficultyLevelPlate {
 }
 
 // ERRORS MGMT
-difficultyLevelPlate.errorKeys = Object.keys(ValidityState.prototype);
-difficultyLevelPlate.ERRORS = {
+DifficultyLevelPlate.errorKeys = Object.keys(ValidityState.prototype);
+DifficultyLevelPlate.ERRORS = {
     'level-nput': {
         valueMissing: 'Уровень сложности не выбран',
     },
 };
 
 // TEMPLATES
-difficultyLevelPlate.temeplate = {
+DifficultyLevelPlate.temeplate = {
     tag: 'div',
     cls: 'difficulty-level',
     content: [
         {
             tag: 'h3',
-            cls: 'difficulty-level__title',
+            cls: ['difficulty-level__title', 'title'],
             content: 'Выбери сложность',
         },
         {
@@ -160,7 +163,7 @@ difficultyLevelPlate.temeplate = {
                 },
                 {
                     tag: 'button',
-                    cls: ['form__submit-button', 'submit-button'],
+                    cls: ['form__submit-button', 'button'],
                     attrs: {
                         type: 'submit',
                     },

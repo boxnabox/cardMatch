@@ -1,11 +1,18 @@
-/*global templateEngine */
+/*global */
 /*eslint no-debugger: "off"*/
+import { templateEngine } from '../scripts/template_engine.js';
+import cardBackImg from '../img/cardback.svg';
+import diamondsIcon from '../img/diamonds.svg';
+import heartsIcon from '../img/hearts.svg';
+import spadesIcon from '../img/spades.svg';
+import clubsIcon from '../img/clubs.svg';
+export { GameTable };
 
-class gameTable {
+class GameTable {
     constructor(container, master) {
         this.plateContainer = container; // cardMatchApp.appScreen
         this.master = master;
-        this.render(gameTable.temeplate);
+        this.render(GameTable.temeplate);
 
         this.gameTable = this.plateContainer.querySelector('.game-table');
         this.stopwatchWindow = this.gameTable.querySelector('.stopwatch__time');
@@ -18,6 +25,7 @@ class gameTable {
         this.stopwatch = this.stopwatch.bind(this);
         this.hideCards = this.hideCards.bind(this);
         this.cardClickHandler = this.cardClickHandler.bind(this);
+        this.goBackClickHandler = this.goBackClickHandler.bind(this);
 
         this.interval = setInterval(this.stopwatch, 1000);
         this.cards = [];
@@ -34,7 +42,7 @@ class gameTable {
 
         // adding cards on table
         this.cardsInGame.forEach((card) => {
-            this.card = templateEngine(gameTable.card);
+            this.card = templateEngine(GameTable.card);
             this.card.appendChild(this.drawCardFace(card));
             this.card.appendChild(this.drawCardBack());
 
@@ -44,9 +52,11 @@ class gameTable {
         // hiding cards, dealing with clicks
         this.cardBacks = this.cardsGrid.querySelectorAll('.card-back');
         this.hideDelay = setTimeout(this.hideCards, 5000);
-        this.cardBacks.forEach((cardBack) => {
-            cardBack.addEventListener('click', this.cardClickHandler);
+        this.cardBacks.forEach((card) => {
+            card.addEventListener('click', this.cardClickHandler);
         });
+
+        this.goBackButton.addEventListener('click', this.goBackClickHandler);
     }
 
     render(widgetAsObject) {
@@ -56,12 +66,18 @@ class gameTable {
     stopwatch() {
         this.master.state.spentTime++;
 
-        let mins = Math.floor(this.master.state.spentTime / 60);
-        let secs = this.master.state.spentTime % 60;
+        this.stopwatchWindow.innerText = this.formatTime(
+            this.master.state.spentTime
+        );
+    }
+
+    formatTime(secconds) {
+        let mins = Math.floor(secconds / 60);
+        let secs = secconds % 60;
 
         if (mins < 10) mins = '0' + mins;
         if (secs < 10) secs = '0' + secs;
-        this.stopwatchWindow.innerText = `${mins}.${secs}`;
+        return `${mins}.${secs}`;
     }
 
     getCardsByLevel(level /*low|med|high*/) {
@@ -114,20 +130,20 @@ class gameTable {
         let cardSuitLink = '';
         switch (cardSuit) {
             case 'h':
-                cardSuitLink = './src/img/hearts.svg';
+                cardSuitLink = heartsIcon;
                 break;
             case 's':
-                cardSuitLink = './src/img/spades.svg';
+                cardSuitLink = spadesIcon;
                 break;
             case 'd':
-                cardSuitLink = './src/img/diamonds.svg';
+                cardSuitLink = diamondsIcon;
                 break;
             case 'c':
-                cardSuitLink = './src/img/clubs.svg';
+                cardSuitLink = clubsIcon;
                 break;
         }
 
-        const cardFace = templateEngine(gameTable.cardFace);
+        const cardFace = templateEngine(GameTable.cardFace);
         const cardRankSlots = cardFace.querySelectorAll('.card-face__rank');
         const cardSuitSlots = cardFace.querySelectorAll('.card-face__suit');
 
@@ -143,9 +159,10 @@ class gameTable {
     }
 
     drawCardBack() {
-        const cardBack = templateEngine(gameTable.cardBack);
+        const cardBack = templateEngine(GameTable.cardBack);
+        const cardBackLink = cardBackImg;
         const cardBackSlot = cardBack.querySelector('.card-back__img');
-        cardBackSlot.setAttribute('src', './src/img/card-back.svg');
+        cardBackSlot.setAttribute('src', cardBackLink);
         return cardBack;
     }
 
@@ -170,6 +187,7 @@ class gameTable {
         }
 
         if (!this.pickedCard) {
+            this.master.state.pickedCards.push(this.cardsInGame[cardIndex]);
             this.pickedCard = this.cardsInGame[cardIndex];
             return;
         }
@@ -178,17 +196,36 @@ class gameTable {
             this.pickedCard.toString() ===
             this.cardsInGame[cardIndex].toString()
         ) {
-            alert('match');
+            this.master.state.pickedCards.push(this.cardsInGame[cardIndex]);
             this.pickedCard = undefined;
+
+            if (
+                this.master.state.pickedCards.length === this.cardsInGame.length
+            ) {
+                clearInterval(this.interval);
+                this.master.state.gameStatus = 'win';
+                this.master.showCurrentGameStage(this.master.state.gameStatus);
+            }
         } else {
-            alert('fail');
+            clearInterval(this.interval);
+            this.master.state.gameStatus = 'lose';
             console.log('showing fail screen');
+            this.master.showCurrentGameStage(this.master.state.gameStatus);
         }
+    }
+
+    goBackClickHandler() {
+        this.master.state.gameStatus = 'start';
+        this.master.state.spentTime = 0;
+        this.master.state.difficultyLevel = undefined;
+        this.master.state.pickedCards = [];
+
+        this.master.showCurrentGameStage(this.master.state.gameStatus);
     }
 }
 
 // TEMPLATES
-gameTable.temeplate = {
+GameTable.temeplate = {
     tag: 'div',
     cls: 'game-table',
     content: [
@@ -225,7 +262,7 @@ gameTable.temeplate = {
                 },
                 {
                     tag: 'button',
-                    cls: 'game-table__go-back-button',
+                    cls: ['game-table__go-back-button', 'button'],
                     attrs: {
                         type: 'button',
                     },
@@ -240,12 +277,12 @@ gameTable.temeplate = {
     ],
 };
 
-gameTable.card = {
+GameTable.card = {
     tag: 'div',
     cls: 'card',
 };
 
-gameTable.cardFace = {
+GameTable.cardFace = {
     tag: 'div',
     cls: 'card-face',
     content: [
@@ -295,7 +332,7 @@ gameTable.cardFace = {
     ],
 };
 
-gameTable.cardBack = {
+GameTable.cardBack = {
     tag: 'div',
     cls: 'card-back',
     content: [
