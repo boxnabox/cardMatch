@@ -209,7 +209,6 @@ class GameTable {
         } else {
             clearInterval(this.interval);
             this.master.state.gameStatus = 'lose';
-            console.log('showing fail screen');
             this.master.showCurrentGameStage(this.master.state.gameStatus);
         }
     }

@@ -37,8 +37,6 @@ class ResultPlate {
             this.master.state.spentTime
         );
 
-        console.dir(this.resultPlate);
-
         this.plateContainer.appendChild(this.resultScreen);
     }
 
