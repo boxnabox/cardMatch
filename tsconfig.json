@@ -1,0 +1,26 @@
+{
+    "extends": "./tsconfig-checks.json",
+    "include": ["./src/assets/*.ts", "./src/scripts/*.ts", "./*.ts"],
+    "exclude": ["node_modules", "bower_components", "jspm_packages"],
+
+    "compilerOptions": {
+        "module": "es6",
+        "target": "es6",
+        "moduleResolution": "node",
+        "outDir": "./dist/"
+    }
+}
+
+// SkyPro config
+// {
+//     "compilerOptions": {
+//       "strict": true,
+//       "outDir": "./dist/",
+//       "noImplicitAny": true,
+//       "module": "es6",
+//       "target": "es5",
+//       "allowJs": true,
+//       "sourceMap": true,
+//       "moduleResolution": "node"
+//     }
+// }

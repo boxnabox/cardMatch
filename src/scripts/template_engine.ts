@@ -1,11 +1,23 @@
 export { templateEngine };
 
-function templateEngine(block) {
-    if (block === undefined || block === null || block === false) {
+interface LayoutTree {
+    tag: string;
+    cls?: string | string[];
+    attrs?: {
+        [key: string]: string;
+    };
+    content?: string | LayoutTree[] | undefined | null;
+}
+
+function templateEngine(
+    block: LayoutTree | LayoutTree[] | string[] | string | undefined | null
+) {
+    if (block === undefined || block === null) {
+        block;
         return document.createTextNode('');
     }
 
-    if (typeof block === 'string' || typeof block === 'number') {
+    if (typeof block === 'string') {
         return document.createTextNode(block);
     }
 
@@ -24,7 +36,11 @@ function templateEngine(block) {
     const result = document.createElement(block.tag);
 
     if (block.cls) {
-        result.classList.add(...[].concat(block.cls).filter(Boolean));
+        if (typeof block.cls === 'string') {
+            result.classList.add(block.cls);
+            return;
+        }
+        result.classList.add(...block.cls);
     }
 
     if (block.attrs) {
