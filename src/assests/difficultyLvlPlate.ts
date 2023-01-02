@@ -1,30 +1,56 @@
 /*global */
-import { templateEngine } from '../scripts/template_engine.js';
+import { templateEngine } from '../scripts/template_engine';
 import { Notyf } from 'notyf';
+import { CardMatchApp } from './cardMatch';
 export { DifficultyLevelPlate };
 
+interface LayoutTree {
+    tag: string;
+    cls?: string | string[];
+    attrs?: {
+        [key: string]: string;
+    };
+    content?: string | LayoutTree[] | undefined | null;
+}
+
 class DifficultyLevelPlate {
-    constructor(container, master) {
+    plateContainer: HTMLElement;
+    levelPlate: HTMLDivElement;
+    optionForm: HTMLFormElement;
+    optionInput: HTMLInputElement;
+    optionsWrapper: HTMLDivElement;
+    options: NodeListOf<HTMLButtonElement>;
+    submitButton: HTMLButtonElement;
+    static temeplate: LayoutTree;
+    static errorKeys: (keyof ValidityState)[];
+    static ERRORS: {
+        [key: string]: {
+            [key: string]: string;
+        };
+    };
+
+    constructor(container: HTMLElement, master: CardMatchApp) {
         this.plateContainer = container; // cardMatchApp.appScreen
         this.render(DifficultyLevelPlate.temeplate);
 
-        this.levelPlate =
-            this.plateContainer.querySelector('.difficulty-level');
+        this.levelPlate = this.plateContainer.querySelector(
+            '.difficulty-level'
+        ) as HTMLDivElement;
         this.optionForm = this.levelPlate.querySelector(
             '.difficulty-level__form'
-        );
+        ) as HTMLFormElement;
         this.optionInput = this.optionForm.querySelector(
-            '.form__difficulty-level-otion'
-        );
+            '.form__difficulty-level-input'
+        ) as HTMLInputElement;
         this.optionsWrapper = this.optionForm.querySelector(
             '.form__difficulty-level-options'
-        );
+        ) as HTMLDivElement;
         this.options = this.optionForm.querySelectorAll(
             '.form__difficulty-level-option'
         );
         this.submitButton = this.optionForm.querySelector(
             '.form__submit-button'
-        );
+        ) as HTMLButtonElement;
 
         this.optionClickHandler = this.optionClickHandler.bind(this);
 
@@ -36,14 +62,13 @@ class DifficultyLevelPlate {
         });
     }
 
-    render(widgetAsObject) {
+    render(widgetAsObject: LayoutTree) {
         this.plateContainer.appendChild(templateEngine(widgetAsObject));
     }
 
-    optionClickHandler(event) {
+    optionClickHandler(event: { target: any }) {
         const target = event.target;
-
-        this.optionInput.value = target.value;
+        target && (this.optionInput.value = target.value);
 
         this.options.forEach((button) => {
             button === target
@@ -52,7 +77,7 @@ class DifficultyLevelPlate {
         });
     }
 
-    formSubmitHandler(event, master) {
+    formSubmitHandler(event: SubmitEvent, master: CardMatchApp) {
         event.preventDefault();
 
         if (this.optionInput.validity.valid) {
@@ -68,6 +93,8 @@ class DifficultyLevelPlate {
 
             const errorMessage =
                 DifficultyLevelPlate.ERRORS[this.optionInput.name][errorType];
+            let x = this.optionInput.name;
+            let y = errorType;
             const notyf = new Notyf();
             notyf.error({
                 message: errorMessage,
@@ -82,7 +109,9 @@ class DifficultyLevelPlate {
 }
 
 // ERRORS MGMT
-DifficultyLevelPlate.errorKeys = Object.keys(ValidityState.prototype);
+DifficultyLevelPlate.errorKeys = Object.keys(ValidityState.prototype) as Array<
+    keyof typeof ValidityState.prototype
+>;
 DifficultyLevelPlate.ERRORS = {
     'level-nput': {
         valueMissing: 'Уровень сложности не выбран',
@@ -104,16 +133,16 @@ DifficultyLevelPlate.temeplate = {
             cls: ['difficulty-level__form', 'form'],
             attrs: {
                 action: '#',
-                novalidate: true,
+                novalidate: '',
             },
             content: [
                 {
                     tag: 'input',
-                    cls: ['form__difficulty-level-otion', 'visually-hidden'],
+                    cls: ['form__difficulty-level-input', 'visually-hidden'],
                     attrs: {
                         type: 'text',
                         name: 'level-nput',
-                        required: true,
+                        required: '',
                     },
                 },
                 {

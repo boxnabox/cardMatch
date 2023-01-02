@@ -13,7 +13,6 @@ function templateEngine(
     block: LayoutTree | LayoutTree[] | string[] | string | undefined | null
 ) {
     if (block === undefined || block === null) {
-        block;
         return document.createTextNode('');
     }
 
@@ -26,7 +25,6 @@ function templateEngine(
 
         block.forEach((item) => {
             const element = templateEngine(item);
-
             fragment.appendChild(element);
         });
 
@@ -38,16 +36,16 @@ function templateEngine(
     if (block.cls) {
         if (typeof block.cls === 'string') {
             result.classList.add(block.cls);
-            return;
+        } else {
+            result.classList.add(...block.cls);
         }
-        result.classList.add(...block.cls);
     }
 
     if (block.attrs) {
         const keys = Object.keys(block.attrs);
 
         keys.forEach((key) => {
-            result.setAttribute(key, block.attrs[key]);
+            result.setAttribute(key, block.attrs![key]);
         });
     }
 
