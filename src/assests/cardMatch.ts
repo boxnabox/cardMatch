@@ -12,10 +12,7 @@ interface LayoutTree {
     content?: string | LayoutTree[] | undefined | null;
 }
 
-type Card = {
-    value: string;
-    suit: string;
-};
+type Card = string[];
 
 // APP
 export class CardMatchApp {
@@ -23,7 +20,7 @@ export class CardMatchApp {
         difficultyLevel: string | undefined; // 'low' | 'med' | 'high'
         gameStatus: 'start' | 'game' | 'win' | 'lose';
         spentTime: number;
-        pickedCards: Card[] | [];
+        pickedCards: Card[];
     };
     appContainer: HTMLBodyElement;
     appScreen: HTMLElement | null;

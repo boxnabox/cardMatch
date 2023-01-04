@@ -1,27 +1,54 @@
 /*global */
-import { templateEngine } from '../scripts/template_engine.js';
+import { templateEngine } from '../scripts/template_engine';
+import { CardMatchApp } from './cardMatch';
 import loseIcon from '../img/lose.svg';
 import winIcon from '../img/win.svg';
 export { ResultPlate };
 
+interface LayoutTree {
+    tag: string;
+    cls?: string | string[];
+    attrs?: {
+        [key: string]: string;
+    };
+    content?: string | LayoutTree[] | undefined | null;
+}
+
+type Card = string[];
+
 class ResultPlate {
-    constructor(container, master) {
+    plateContainer: HTMLElement;
+    master: CardMatchApp;
+    resultScreen: HTMLElement | Text | DocumentFragment;
+    static temeplate: LayoutTree;
+    resultPlate: HTMLDivElement | undefined;
+    resultImage: HTMLImageElement | undefined;
+    resultTitle: HTMLHeadingElement | undefined;
+    resultTime: HTMLDivElement | undefined;
+    playAgainButtom: HTMLButtonElement | undefined;
+
+    constructor(container: HTMLElement, master: CardMatchApp) {
         this.plateContainer = container; // cardMatchApp.appScreen
         this.master = master;
         // this.render(ResultPlate.temeplate);
         this.resultScreen = templateEngine(ResultPlate.temeplate);
 
-        this.resultPlate = this.resultScreen.querySelector('.result-plate');
+        if (this.resultScreen instanceof Text) return;
+        this.resultPlate = this.resultScreen.querySelector(
+            '.result-plate'
+        ) as HTMLDivElement;
         this.resultImage = this.resultPlate.querySelector(
             '.result-plate__image'
-        );
+        ) as HTMLImageElement;
         this.resultTitle = this.resultPlate.querySelector(
             '.result-plate__title'
-        );
-        this.resultTime = this.resultPlate.querySelector('.result-plate__time');
+        ) as HTMLHeadingElement;
+        this.resultTime = this.resultPlate.querySelector(
+            '.result-plate__time'
+        ) as HTMLDivElement;
         this.playAgainButtom = this.resultPlate.querySelector(
             '.result-plate__again-button'
-        );
+        ) as HTMLButtonElement;
 
         this.goBackClickHandler = this.goBackClickHandler.bind(this);
         this.playAgainButtom.addEventListener('click', this.goBackClickHandler);
@@ -40,9 +67,9 @@ class ResultPlate {
         this.plateContainer.appendChild(this.resultScreen);
     }
 
-    formatTime(secconds) {
-        let mins = Math.floor(secconds / 60);
-        let secs = secconds % 60;
+    formatTime(secconds: number) {
+        let mins: string | number = Math.floor(secconds / 60);
+        let secs: string | number = secconds % 60;
 
         if (mins < 10) mins = '0' + mins;
         if (secs < 10) secs = '0' + secs;

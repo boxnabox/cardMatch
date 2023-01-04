@@ -245,17 +245,17 @@ class GameTable {
             }
         }
 
-        if (!this.pickedCard && cardIndex) {
-            this.master.state.pickedCards.push(this.cardsInGame[cardIndex]);
-            this.pickedCard = this.cardsInGame[cardIndex];
+        if (!this.pickedCard) {
+            this.master.state.pickedCards.push(this.cardsInGame[cardIndex!]);
+            this.pickedCard = this.cardsInGame[cardIndex!];
             return;
         }
 
         if (
-            this.pickedCard.toString() ===
-            this.cardsInGame[cardIndex].toString()
+            this.pickedCard!.toString() ===
+            this.cardsInGame[cardIndex!].toString()
         ) {
-            this.master.state.pickedCards.push(this.cardsInGame[cardIndex]);
+            this.master.state.pickedCards.push(this.cardsInGame[cardIndex!]);
             this.pickedCard = undefined;
 
             if (
