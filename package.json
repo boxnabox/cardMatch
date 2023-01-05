@@ -2,7 +2,7 @@
     "name": "cardmatch",
     "version": "1.0.0",
     "description": "This is repository for the 4th block of SkyPro webdev course.",
-    "main": "cardMatch.js",
+    "main": "index.ts",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "formatAll": "prettier --write .",
