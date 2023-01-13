@@ -1,14 +1,5 @@
 export { templateEngine };
 
-interface LayoutTree {
-    tag: string;
-    cls?: string | string[];
-    attrs?: {
-        [key: string]: string;
-    };
-    content?: string | LayoutTree[] | undefined | null;
-}
-
 function templateEngine(
     block: LayoutTree | LayoutTree[] | string[] | string | undefined | null
 ) {

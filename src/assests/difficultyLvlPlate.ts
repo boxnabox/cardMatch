@@ -4,15 +4,6 @@ import { Notyf } from 'notyf';
 import { CardMatchApp } from './cardMatch';
 export { DifficultyLevelPlate };
 
-interface LayoutTree {
-    tag: string;
-    cls?: string | string[];
-    attrs?: {
-        [key: string]: string;
-    };
-    content?: string | LayoutTree[] | undefined | null;
-}
-
 class DifficultyLevelPlate {
     plateContainer: HTMLElement;
     levelPlate: HTMLDivElement;
@@ -23,10 +14,10 @@ class DifficultyLevelPlate {
     submitButton: HTMLButtonElement;
     static temeplate: LayoutTree;
     static errorKeys: (keyof ValidityState)[];
-    static ERRORS: {
-        [key: string]: {
-            [key: string]: string;
-        };
+    static ERRORS: ErrorsType = {
+        'level-nput': {
+            valueMissing: 'Уровень сложности не выбран',
+        },
     };
 
     constructor(container: HTMLElement, master: CardMatchApp) {
@@ -66,9 +57,9 @@ class DifficultyLevelPlate {
         this.plateContainer.appendChild(templateEngine(widgetAsObject));
     }
 
-    optionClickHandler(event: { target: any }) {
-        const target = event.target;
-        target && (this.optionInput.value = target.value);
+    optionClickHandler(event: MouseEvent) {
+        const target = event.target as HTMLInputElement;
+        this.optionInput.value = target.value;
 
         this.options.forEach((button) => {
             button === target
@@ -81,7 +72,8 @@ class DifficultyLevelPlate {
         event.preventDefault();
 
         if (this.optionInput.validity.valid) {
-            master.state.difficultyLevel = this.optionInput.value;
+            master.state.difficultyLevel = this.optionInput
+                .value as DifficultyLevel;
             master.state.gameStatus = 'game';
             master.showCurrentGameStage(master.state.gameStatus);
 
@@ -112,11 +104,6 @@ class DifficultyLevelPlate {
 DifficultyLevelPlate.errorKeys = Object.keys(ValidityState.prototype) as Array<
     keyof typeof ValidityState.prototype
 >;
-DifficultyLevelPlate.ERRORS = {
-    'level-nput': {
-        valueMissing: 'Уровень сложности не выбран',
-    },
-};
 
 // TEMPLATES
 DifficultyLevelPlate.temeplate = {

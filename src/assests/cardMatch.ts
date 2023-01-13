@@ -3,22 +3,11 @@ import { DifficultyLevelPlate } from './difficultyLvlPlate';
 import { GameTable } from './gameTable';
 import { ResultPlate } from './resultPlate';
 
-interface LayoutTree {
-    tag: string;
-    cls?: string | string[];
-    attrs?: {
-        [key: string]: string;
-    };
-    content?: string | LayoutTree[] | undefined | null;
-}
-
-type Card = string[];
-
 // APP
 export class CardMatchApp {
     state: {
-        difficultyLevel: string | undefined; // 'low' | 'med' | 'high'
-        gameStatus: 'start' | 'game' | 'win' | 'lose';
+        difficultyLevel: DifficultyLevel; // string | undefined;
+        gameStatus: GameStatus;
         spentTime: number;
         pickedCards: Card[];
     };
@@ -32,7 +21,7 @@ export class CardMatchApp {
     constructor(container: HTMLBodyElement) {
         // GLOBAL APP STATE
         this.state = {
-            difficultyLevel: undefined,
+            difficultyLevel: 'no-lvl',
             gameStatus: 'start',
             spentTime: 0,
             pickedCards: [],

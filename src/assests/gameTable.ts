@@ -10,17 +10,6 @@ import spadesIcon from '../img/spades.svg';
 import clubsIcon from '../img/clubs.svg';
 export { GameTable };
 
-interface LayoutTree {
-    tag: string;
-    cls?: string | string[];
-    attrs?: {
-        [key: string]: string;
-    };
-    content?: string | LayoutTree[] | undefined | null;
-}
-
-type Card = string[];
-
 class GameTable {
     plateContainer: HTMLElement;
     master: CardMatchApp;
@@ -37,20 +26,8 @@ class GameTable {
     hideDelay: NodeJS.Timeout;
     static temeplate: LayoutTree;
     static cardTemeplate: { tag: string; cls: string };
-    static cardFaceTemeplate:
-        | string
-        | string[]
-        | LayoutTree
-        | LayoutTree[]
-        | null
-        | undefined;
-    static cardBackTemeplate:
-        | string
-        | string[]
-        | LayoutTree
-        | LayoutTree[]
-        | null
-        | undefined;
+    static cardFaceTemeplate: CardFacesType;
+    static cardBackTemeplate: CardFacesType;
 
     constructor(container: HTMLElement, master: CardMatchApp) {
         this.plateContainer = container; // cardMatchApp.appScreen
@@ -246,16 +223,20 @@ class GameTable {
         }
 
         if (!this.pickedCard) {
-            this.master.state.pickedCards.push(this.cardsInGame[cardIndex!]);
-            this.pickedCard = this.cardsInGame[cardIndex!];
+            this.master.state.pickedCards.push(
+                this.cardsInGame[cardIndex as number]
+            );
+            this.pickedCard = this.cardsInGame[cardIndex as number];
             return;
         }
 
         if (
-            this.pickedCard!.toString() ===
-            this.cardsInGame[cardIndex!].toString()
+            this.pickedCard.toString() ===
+            this.cardsInGame[cardIndex as number].toString()
         ) {
-            this.master.state.pickedCards.push(this.cardsInGame[cardIndex!]);
+            this.master.state.pickedCards.push(
+                this.cardsInGame[cardIndex as number]
+            );
             this.pickedCard = undefined;
 
             if (
@@ -275,7 +256,7 @@ class GameTable {
     goBackClickHandler() {
         this.master.state.gameStatus = 'start';
         this.master.state.spentTime = 0;
-        this.master.state.difficultyLevel = undefined;
+        this.master.state.difficultyLevel = 'no-lvl';
         this.master.state.pickedCards = [];
 
         this.master.showCurrentGameStage(this.master.state.gameStatus);

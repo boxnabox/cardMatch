@@ -5,17 +5,6 @@ import loseIcon from '../img/lose.svg';
 import winIcon from '../img/win.svg';
 export { ResultPlate };
 
-interface LayoutTree {
-    tag: string;
-    cls?: string | string[];
-    attrs?: {
-        [key: string]: string;
-    };
-    content?: string | LayoutTree[] | undefined | null;
-}
-
-type Card = string[];
-
 class ResultPlate {
     plateContainer: HTMLElement;
     master: CardMatchApp;
@@ -79,7 +68,7 @@ class ResultPlate {
     goBackClickHandler() {
         this.master.state.gameStatus = 'start';
         this.master.state.spentTime = 0;
-        this.master.state.difficultyLevel = undefined;
+        this.master.state.difficultyLevel = 'no-lvl';
         this.master.state.pickedCards = [];
 
         this.master.showCurrentGameStage(this.master.state.gameStatus);
