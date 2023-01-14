@@ -4,7 +4,7 @@
     "description": "This is repository for the 4th block of SkyPro webdev course.",
     "main": "index.ts",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "test": "mocha",
         "formatAll": "prettier --write .",
         "prepare": "husky install",
         "formatSRC": "prettier --write ./src/",
@@ -19,7 +19,7 @@
         "type": "git",
         "url": "git+https://github.com/boxnabox/cardMatch.git"
     },
-    "author": "",
+    "author": "boxnabox",
     "license": "ISC",
     "bugs": {
         "url": "https://github.com/boxnabox/cardMatch/issues"
@@ -29,6 +29,7 @@
         "notyf": "3.10.0"
     },
     "devDependencies": {
+        "chai": "^4.3.7",
         "copy-webpack-plugin": "^11.0.0",
         "css-loader": "^6.7.2",
         "css-minimizer-webpack-plugin": "^4.2.2",
@@ -38,6 +39,7 @@
         "html-webpack-plugin": "^5.5.0",
         "husky": "^8.0.2",
         "mini-css-extract-plugin": "^2.7.1",
+        "mocha": "^10.2.0",
         "prettier": "^2.8.0",
         "style-loader": "^3.3.1",
         "stylelint": "^14.15.0",
