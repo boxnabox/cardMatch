@@ -106,9 +106,12 @@ class GameTable {
         return `${mins}.${secs}`;
     }
 
-    getCardsByLevel(level: string | undefined /*low|med|high*/): Card[] {
+    getCardsByLevel(level: DifficultyLevel): Card[] {
         const result: Card[] = [];
-        let iterator = 3;
+
+        if (level === 'no-lvl') return result;
+
+        let iterator = 3; // means 'low'
         level === 'med' && (iterator = 6);
         level === 'high' && (iterator = 10);
         const proxyCards = this.cards;
