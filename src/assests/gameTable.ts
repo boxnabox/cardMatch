@@ -20,7 +20,7 @@ class GameTable {
     interval: NodeJS.Timer;
     cards: Card[];
     cardsInGame: Card[];
-    pickedCard: Card | undefined;
+    pickedCard?: Card;
     card: HTMLElement | DocumentFragment | Text | undefined;
     cardBacks: NodeListOf<HTMLElement>;
     hideDelay: NodeJS.Timeout;

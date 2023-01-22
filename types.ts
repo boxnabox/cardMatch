@@ -4,7 +4,7 @@ interface LayoutTree {
     attrs?: {
         [key: string]: string;
     };
-    content?: string | LayoutTree[] | undefined | null;
+    content?: string | LayoutTree[] | null;
 }
 
 type Card = string[];

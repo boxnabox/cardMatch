@@ -36,7 +36,7 @@ function templateEngine(
         const keys = Object.keys(block.attrs);
 
         keys.forEach((key) => {
-            result.setAttribute(key, block.attrs![key]);
+            block.attrs && result.setAttribute(key, block.attrs[key]);
         });
     }
 
