@@ -1,11 +1,13 @@
 export { templateEngine };
 
-function templateEngine(block) {
-    if (block === undefined || block === null || block === false) {
+function templateEngine(
+    block: LayoutTree | LayoutTree[] | string[] | string | undefined | null
+) {
+    if (block === undefined || block === null) {
         return document.createTextNode('');
     }
 
-    if (typeof block === 'string' || typeof block === 'number') {
+    if (typeof block === 'string') {
         return document.createTextNode(block);
     }
 
@@ -14,7 +16,6 @@ function templateEngine(block) {
 
         block.forEach((item) => {
             const element = templateEngine(item);
-
             fragment.appendChild(element);
         });
 
@@ -24,14 +25,18 @@ function templateEngine(block) {
     const result = document.createElement(block.tag);
 
     if (block.cls) {
-        result.classList.add(...[].concat(block.cls).filter(Boolean));
+        if (typeof block.cls === 'string') {
+            result.classList.add(block.cls);
+        } else {
+            result.classList.add(...block.cls);
+        }
     }
 
     if (block.attrs) {
         const keys = Object.keys(block.attrs);
 
         keys.forEach((key) => {
-            result.setAttribute(key, block.attrs[key]);
+            block.attrs && result.setAttribute(key, block.attrs[key]);
         });
     }
 

@@ -1,15 +1,28 @@
-import { templateEngine } from '../scripts/template_engine.js';
-import { DifficultyLevelPlate } from './difficultyLvlPlate.js';
-import { GameTable } from './gameTable.js';
-import { ResultPlate } from './resultPlate.js';
+import { templateEngine } from '../scripts/template_engine';
+import { DifficultyLevelPlate } from './difficultyLvlPlate';
+import { GameTable } from './gameTable';
+import { ResultPlate } from './resultPlate';
 
 // APP
 export class CardMatchApp {
-    constructor(container) {
+    state: {
+        difficultyLevel: DifficultyLevel; // string | undefined;
+        gameStatus: GameStatus;
+        spentTime: number;
+        pickedCards: Card[];
+    };
+    appContainer: HTMLBodyElement;
+    appScreen: HTMLElement | null;
+    static appScreenTemeplate: LayoutTree;
+    appStartStage?: DifficultyLevelPlate;
+    appGameStage?: GameTable;
+    appResultStage?: ResultPlate;
+
+    constructor(container: HTMLBodyElement) {
         // GLOBAL APP STATE
         this.state = {
-            difficultyLevel: undefined, // low|med|high
-            gameStatus: 'start', // start<default>|game|result
+            difficultyLevel: 'no-lvl',
+            gameStatus: 'start',
             spentTime: 0,
             pickedCards: [],
         };
@@ -21,11 +34,15 @@ export class CardMatchApp {
         this.showCurrentGameStage(this.state.gameStatus);
     }
 
-    render(widgetAsObject) {
+    render(widgetAsObject: LayoutTree) {
         this.appContainer.appendChild(templateEngine(widgetAsObject));
     }
 
-    showCurrentGameStage(status) {
+    showCurrentGameStage(status: typeof this.state.gameStatus) {
+        if (this.appScreen === null) {
+            return;
+        }
+
         switch (true) {
             case status === 'start':
                 this.appScreen.innerHTML = '';

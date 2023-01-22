@@ -1,6 +1,8 @@
 /*global */
 /*eslint no-debugger: "off"*/
-import { templateEngine } from '../scripts/template_engine.js';
+
+import { templateEngine } from '../scripts/template_engine';
+import { CardMatchApp } from './cardMatch';
 import cardBackImg from '../img/cardback.svg';
 import diamondsIcon from '../img/diamonds.svg';
 import heartsIcon from '../img/hearts.svg';
@@ -9,17 +11,41 @@ import clubsIcon from '../img/clubs.svg';
 export { GameTable };
 
 class GameTable {
-    constructor(container, master) {
+    plateContainer: HTMLElement;
+    master: CardMatchApp;
+    gameTable: HTMLDivElement;
+    stopwatchWindow: HTMLDivElement;
+    goBackButton: HTMLButtonElement;
+    cardsGrid: HTMLDivElement;
+    interval: NodeJS.Timer;
+    cards: Card[];
+    cardsInGame: Card[];
+    pickedCard?: Card;
+    card: HTMLElement | DocumentFragment | Text | undefined;
+    cardBacks: NodeListOf<HTMLElement>;
+    hideDelay: NodeJS.Timeout;
+    static temeplate: LayoutTree;
+    static cardTemeplate: { tag: string; cls: string };
+    static cardFaceTemeplate: CardFacesType;
+    static cardBackTemeplate: CardFacesType;
+
+    constructor(container: HTMLElement, master: CardMatchApp) {
         this.plateContainer = container; // cardMatchApp.appScreen
         this.master = master;
         this.render(GameTable.temeplate);
 
-        this.gameTable = this.plateContainer.querySelector('.game-table');
-        this.stopwatchWindow = this.gameTable.querySelector('.stopwatch__time');
+        this.gameTable = this.plateContainer.querySelector(
+            '.game-table'
+        ) as HTMLDivElement;
+        this.stopwatchWindow = this.gameTable.querySelector(
+            '.stopwatch__time'
+        ) as HTMLDivElement;
         this.goBackButton = this.gameTable.querySelector(
             '.game-table__go-back-button'
-        );
-        this.cardsGrid = this.gameTable.querySelector('.game-table__cards');
+        ) as HTMLButtonElement;
+        this.cardsGrid = this.gameTable.querySelector(
+            '.game-table__cards'
+        ) as HTMLDivElement;
         this.applyTableGrid();
 
         this.stopwatch = this.stopwatch.bind(this);
@@ -31,7 +57,7 @@ class GameTable {
         this.cards = [];
         ['6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'].map((value) => {
             ['h', 'd', 'c', 's'].forEach((suit) => {
-                const card = [value, suit];
+                const card: Card = [value, suit];
                 this.cards.push(card);
             });
         });
@@ -42,7 +68,7 @@ class GameTable {
 
         // adding cards on table
         this.cardsInGame.forEach((card) => {
-            this.card = templateEngine(GameTable.card);
+            this.card = templateEngine(GameTable.cardTemeplate);
             this.card.appendChild(this.drawCardFace(card));
             this.card.appendChild(this.drawCardBack());
 
@@ -59,7 +85,7 @@ class GameTable {
         this.goBackButton.addEventListener('click', this.goBackClickHandler);
     }
 
-    render(widgetAsObject) {
+    render(widgetAsObject: LayoutTree) {
         this.plateContainer.appendChild(templateEngine(widgetAsObject));
     }
 
@@ -71,18 +97,21 @@ class GameTable {
         );
     }
 
-    formatTime(secconds) {
-        let mins = Math.floor(secconds / 60);
-        let secs = secconds % 60;
+    formatTime(secconds: number) {
+        let mins: string | number = Math.floor(secconds / 60);
+        let secs: string | number = secconds % 60;
 
         if (mins < 10) mins = '0' + mins;
         if (secs < 10) secs = '0' + secs;
         return `${mins}.${secs}`;
     }
 
-    getCardsByLevel(level /*low|med|high*/) {
-        const result = [];
-        let iterator = 3;
+    getCardsByLevel(level: DifficultyLevel): Card[] {
+        const result: Card[] = [];
+
+        if (level === 'no-lvl') return result;
+
+        let iterator = 3; // means 'low'
         level === 'med' && (iterator = 6);
         level === 'high' && (iterator = 10);
         const proxyCards = this.cards;
@@ -96,7 +125,7 @@ class GameTable {
         return result;
     }
 
-    tossCards(deck) {
+    tossCards(deck: Card[]) {
         const result = [];
 
         while (deck.length) {
@@ -123,7 +152,7 @@ class GameTable {
         }
     }
 
-    drawCardFace(cardCode) {
+    drawCardFace(cardCode: Card) {
         const cardRank = cardCode[0];
         const cardSuit = cardCode[1];
 
@@ -143,26 +172,32 @@ class GameTable {
                 break;
         }
 
-        const cardFace = templateEngine(GameTable.cardFace);
-        const cardRankSlots = cardFace.querySelectorAll('.card-face__rank');
-        const cardSuitSlots = cardFace.querySelectorAll('.card-face__suit');
+        const cardFace = templateEngine(GameTable.cardFaceTemeplate);
+        if (!(cardFace instanceof Text)) {
+            const cardRankSlots: NodeListOf<HTMLDivElement> =
+                cardFace.querySelectorAll('.card-face__rank');
+            const cardSuitSlots = cardFace.querySelectorAll('.card-face__suit');
 
-        cardRankSlots.forEach((slot) => {
-            slot.innerText = cardRank;
-        });
+            cardRankSlots.forEach((slot) => {
+                slot.innerText = cardRank;
+            });
 
-        cardSuitSlots.forEach((slot) => {
-            slot.setAttribute('src', cardSuitLink);
-        });
+            cardSuitSlots.forEach((slot) => {
+                slot.setAttribute('src', cardSuitLink);
+            });
+        }
 
         return cardFace;
     }
 
     drawCardBack() {
-        const cardBack = templateEngine(GameTable.cardBack);
+        const cardBack = templateEngine(GameTable.cardBackTemeplate);
         const cardBackLink = cardBackImg;
-        const cardBackSlot = cardBack.querySelector('.card-back__img');
-        cardBackSlot.setAttribute('src', cardBackLink);
+        if (!(cardBack instanceof Text)) {
+            const cardBackSlot = cardBack.querySelector('.card-back__img');
+            cardBackSlot && cardBackSlot.setAttribute('src', cardBackLink);
+        }
+
         return cardBack;
     }
 
@@ -172,12 +207,16 @@ class GameTable {
         });
     }
 
-    cardClickHandler(event) {
-        const target = event.currentTarget;
+    cardClickHandler(event: MouseEvent) {
+        const target = event.currentTarget as HTMLElement;
         target.classList.remove('cover');
-        const cardsParent = target.closest('.game-table__cards');
-        const cardsArray = cardsParent.querySelectorAll('.card-back');
-        let cardIndex = undefined;
+        const cardsParent = target.closest(
+            '.game-table__cards'
+        ) as HTMLDivElement;
+        const cardsArray = cardsParent.querySelectorAll(
+            '.card-back'
+        ) as NodeListOf<HTMLDivElement>;
+        let cardIndex: number | undefined = undefined;
 
         for (let i = 0; i < cardsArray.length; i++) {
             if (cardsArray[i] === target) {
@@ -187,16 +226,20 @@ class GameTable {
         }
 
         if (!this.pickedCard) {
-            this.master.state.pickedCards.push(this.cardsInGame[cardIndex]);
-            this.pickedCard = this.cardsInGame[cardIndex];
+            this.master.state.pickedCards.push(
+                this.cardsInGame[cardIndex as number]
+            );
+            this.pickedCard = this.cardsInGame[cardIndex as number];
             return;
         }
 
         if (
             this.pickedCard.toString() ===
-            this.cardsInGame[cardIndex].toString()
+            this.cardsInGame[cardIndex as number].toString()
         ) {
-            this.master.state.pickedCards.push(this.cardsInGame[cardIndex]);
+            this.master.state.pickedCards.push(
+                this.cardsInGame[cardIndex as number]
+            );
             this.pickedCard = undefined;
 
             if (
@@ -209,7 +252,6 @@ class GameTable {
         } else {
             clearInterval(this.interval);
             this.master.state.gameStatus = 'lose';
-            console.log('showing fail screen');
             this.master.showCurrentGameStage(this.master.state.gameStatus);
         }
     }
@@ -217,7 +259,7 @@ class GameTable {
     goBackClickHandler() {
         this.master.state.gameStatus = 'start';
         this.master.state.spentTime = 0;
-        this.master.state.difficultyLevel = undefined;
+        this.master.state.difficultyLevel = 'no-lvl';
         this.master.state.pickedCards = [];
 
         this.master.showCurrentGameStage(this.master.state.gameStatus);
@@ -277,12 +319,12 @@ GameTable.temeplate = {
     ],
 };
 
-GameTable.card = {
+GameTable.cardTemeplate = {
     tag: 'div',
     cls: 'card',
 };
 
-GameTable.cardFace = {
+GameTable.cardFaceTemeplate = {
     tag: 'div',
     cls: 'card-face',
     content: [
@@ -332,7 +374,7 @@ GameTable.cardFace = {
     ],
 };
 
-GameTable.cardBack = {
+GameTable.cardBackTemeplate = {
     tag: 'div',
     cls: 'card-back',
     content: [
